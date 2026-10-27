@@ -4,7 +4,7 @@ Aplicación web para que una clínica pequeña gestione sus citas. Los pacientes
 
 Proyecto Final del Máster en Desarrollo Web Full Stack (Conquer Blocks). Backend en **Django** y flujo de reserva en **React** consumiendo una **API REST** del propio backend.
 
-- **Demo:** `https://<servicio>.onrender.com` (ver usuarios de prueba abajo)
+- **Demo:** https://clinicacitas.onrender.com (ver usuarios de prueba abajo; la primera carga puede tardar unos 50 s)
 - **Memoria:** `docs/memoria.pdf`
 
 ## Funcionalidades
