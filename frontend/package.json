@@ -1,0 +1,21 @@
+{
+  "name": "clinicacitas-reserva",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Aplicación React de reservas de ClinicaCitas. Se compila dentro de los estáticos de Django.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "5.0.4",
+    "vite": "7.1.9",
+    "vitest": "3.2.4"
+  }
+}
