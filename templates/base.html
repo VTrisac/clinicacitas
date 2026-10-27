@@ -1,0 +1,40 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}ClinicaCitas{% endblock %} · ClinicaCitas</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="{% url 'inicio' %}">Clinica<span>Citas</span></a>
+    <nav class="menu">
+      {% if user.is_authenticated %}
+        {% if user.es_profesional %}<a href="{% url 'agenda' %}">Mi agenda</a>{% endif %}
+        {% if user.es_personal %}
+          <a href="{% url 'recepcion' %}">Recepción</a>
+          <a href="{% url 'panel' %}">Panel</a>
+          <a href="{% url 'admin:index' %}">Administración</a>
+        {% endif %}
+        {% if user.es_paciente %}<a href="{% url 'reservar' %}">Mis citas</a>{% endif %}
+        <span class="menu__user">{{ user }}</span>
+        <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link">Salir</button></form>
+      {% else %}
+        <a href="{% url 'reservar' %}">Reservar</a>
+        <a href="{% url 'login' %}">Entrar</a>
+        <a class="btn btn--small" href="{% url 'registro' %}">Crear cuenta</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="container">
+    {% for m in messages %}<div class="alert alert--{{ m.tags }}" role="status">{{ m }}</div>{% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">ClinicaCitas · Proyecto Final de Máster Full Stack · Conquer Blocks</footer>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

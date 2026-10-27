@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Reservar cita{% endblock %}
+{% block head %}<link rel="stylesheet" href="{% static 'reserva/reserva.css' %}">{% endblock %}
+{% block content %}
+{# Aquí se monta la aplicación React (frontend/src). Lee la API de /api/ #}
+<div id="reserva-root" data-login-url="{{ login_url }}" data-registro-url="{% url 'registro' %}">
+  <noscript>Necesitas JavaScript activado para reservar online.</noscript>
+</div>
+{% endblock %}
+{% block scripts %}<script type="module" src="{% static 'reserva/reserva.js' %}"></script>{% endblock %}

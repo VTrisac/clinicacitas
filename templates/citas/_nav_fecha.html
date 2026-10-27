@@ -1,0 +1,6 @@
+<form method="get" class="nav-fecha">
+  <a class="btn btn--secundario btn--small" href="?fecha={{ anterior|date:'Y-m-d' }}" aria-label="Día anterior">←</a>
+  <input type="date" name="fecha" value="{{ fecha|date:'Y-m-d' }}" onchange="this.form.submit()" aria-label="Fecha">
+  <a class="btn btn--secundario btn--small" href="?fecha={{ siguiente|date:'Y-m-d' }}" aria-label="Día siguiente">→</a>
+  {% if fecha != hoy %}<a class="btn btn--secundario btn--small" href="?">Hoy</a>{% endif %}
+</form>

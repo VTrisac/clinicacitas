@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Recepción{% endblock %}
+{% block content %}
+<div class="barra">
+  <h1>Recepción · {{ fecha|date:'l j \d\e F' }}</h1>
+  {% include 'citas/_nav_fecha.html' %}
+</div>
+
+<div class="columnas">
+  {% for col in columnas %}
+    <section class="columna" style="--color: {{ col.profesional.color }}">
+      <h3>{{ col.profesional }}</h3>
+      <p class="muted">{{ col.profesional.especialidad }}</p>
+      {% for b in col.bloqueos %}<p class="alert alert--warning">No disponible: {{ b.motivo }} ({{ b.inicio|date:'d/m H:i' }} – {{ b.fin|date:'d/m H:i' }})</p>{% endfor %}
+      <ul class="huecos-lista">
+        {% for c in col.citas %}
+          <li>
+            <span class="hora">{{ c.inicio|time:'H:i' }}</span> · {{ c.paciente }}
+            <span class="etiqueta etiqueta--{{ c.estado }}">{{ c.get_estado_display }}</span><br>
+            <span class="muted">{{ c.servicio.nombre }} · {{ c.paciente.telefono }}</span>
+            {% if c.estado == 'confirmada' or c.estado == 'pendiente' %}
+              <form method="post" action="{% url 'cancelar_cita' c.pk %}" onsubmit="return confirm('¿Cancelar la cita de {{ c.paciente|escapejs }}?')">
+                {% csrf_token %}<input type="hidden" name="volver" value="{{ request.get_full_path }}">
+                <button class="link">Cancelar</button>
+              </form>
+            {% endif %}
+          </li>
+        {% empty %}<li class="muted">Sin citas</li>{% endfor %}
+      </ul>
+    </section>
+  {% empty %}<p class="vacio">No hay profesionales activos.</p>{% endfor %}
+</div>
+
+<h2>Dar una cita</h2>
+<div class="card-form">
+  <form method="get" action="{% url 'nueva_cita' %}" class="form">
+    {% for field in form %}<label>{{ field.label }} {{ field }}</label>{% endfor %}
+    <button class="btn" type="submit">Ver huecos libres</button>
+  </form>
+</div>
+
+<h2>Bloquear agenda</h2>
+<div class="card-form">
+  <form method="post" action="{% url 'nuevo_bloqueo' %}" class="form">
+    {% csrf_token %}<input type="hidden" name="volver" value="{{ request.get_full_path }}">
+    {% for field in form_bloqueo %}<label>{{ field.label }} {{ field }}</label>{% endfor %}
+    <button class="btn btn--secundario" type="submit">Crear bloqueo</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Crear cuenta{% endblock %}
+{% block content %}
+<div class="auth card">
+  <h1>Crear cuenta de paciente</h1>
+  <form method="post" class="form" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <label>{{ field.label }} {{ field }}
+        {% for e in field.errors %}<span class="error">{{ e }}</span>{% endfor %}
+      </label>
+    {% endfor %}
+    <button class="btn" type="submit">Crear cuenta</button>
+  </form>
+  <p class="muted">¿Ya tienes cuenta? <a href="{% url 'login' %}">Entra</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Panel{% endblock %}
+{% block content %}
+<h1>Panel · últimos 30 días</h1>
+<p class="muted">Del {{ desde|date:'j \d\e F' }} al {{ hasta|date:'j \d\e F \d\e Y' }}</p>
+
+<div class="kpis">
+  <div class="kpi"><strong>{{ total_citas }}</strong><span>citas (sin canceladas)</span></div>
+  <div class="kpi"><strong>{{ ocupacion_media }} %</strong><span>ocupación media de la agenda</span></div>
+  <div class="kpi"><strong>{{ total_no_presentados }}</strong><span>pacientes no presentados</span></div>
+  <div class="kpi"><strong>{{ proximos_7_dias }}</strong><span>citas en los próximos 7 días</span></div>
+</div>
+
+<div class="tabla-scroll">
+<table class="tabla">
+  <thead><tr><th>Profesional</th><th class="num">Citas</th><th>Ocupación</th><th class="num">No presentados</th><th class="num">Tasa no presentados</th></tr></thead>
+  <tbody>
+  {% for f in filas %}
+    <tr>
+      <td>{{ f.profesional }}<br><span class="muted">{{ f.profesional.especialidad }}</span></td>
+      <td class="num">{{ f.citas }}</td>
+      <td><div class="barra-uso" title="{{ f.ocupacion }} %"><span style="width: {{ f.ocupacion }}%"></span></div> {{ f.ocupacion }} %</td>
+      <td class="num">{{ f.no_presentados }}</td>
+      <td class="num">{{ f.tasa_no_presentados }} %</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+<p class="muted">Ocupación = minutos reservados / minutos de horario (descontando bloqueos). La tasa de no presentados se calcula sobre las citas ya cerradas (atendidas + no presentadas).</p>
+<p><a href="{% url 'admin:index' %}">Gestionar servicios, profesionales y horarios en Administración →</a></p>
+{% endblock %}

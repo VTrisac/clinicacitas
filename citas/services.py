@@ -105,12 +105,13 @@ def marcar(cita, usuario, estado, notas=None, ahora=None):
     """El profesional (o recepción) marca la cita como atendida o no presentada."""
     if usuario.es_paciente or not puede_gestionar(usuario, cita):
         raise PermissionDenied
-    if estado not in (Cita.Estado.ATENDIDA, Cita.Estado.NO_PRESENTADA, Cita.Estado.CONFIRMADA):
+    if estado not in (Cita.Estado.ATENDIDA, Cita.Estado.NO_PRESENTADA, Cita.Estado.CONFIRMADA,
+                      Cita.Estado.PENDIENTE):
         raise ValidationError('Estado no válido.')
     if cita.estado == Cita.Estado.CANCELADA:
         raise ValidationError('La cita está cancelada.')
     ahora = ahora or timezone.now()
-    if estado != Cita.Estado.CONFIRMADA and cita.inicio > ahora:
+    if estado in (Cita.Estado.ATENDIDA, Cita.Estado.NO_PRESENTADA) and cita.inicio > ahora:
         raise ValidationError('No se puede marcar una cita que aún no ha empezado.')
     cita.estado = estado
     if notas is not None:

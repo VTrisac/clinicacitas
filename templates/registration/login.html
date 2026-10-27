@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Entrar{% endblock %}
+{% block content %}
+<div class="auth card">
+  <h1>Entrar</h1>
+  <form method="post" class="form">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="alert alert--error">Usuario o contraseña incorrectos.</div>{% endif %}
+    <label>Usuario <input type="text" name="username" autocomplete="username" required autofocus value="{{ form.username.value|default:'' }}"></label>
+    <label>Contraseña <input type="password" name="password" autocomplete="current-password" required></label>
+    <input type="hidden" name="next" value="{{ next }}">
+    <button class="btn" type="submit">Entrar</button>
+  </form>
+  <p class="muted">¿No tienes cuenta? <a href="{% url 'registro' %}">Crea una</a></p>
+</div>
+{% endblock %}

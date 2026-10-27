@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Mi agenda{% endblock %}
+{% block content %}
+<div class="barra">
+  <h1>Mi agenda · {{ fecha|date:'l j \d\e F' }}</h1>
+  {% include 'citas/_nav_fecha.html' %}
+</div>
+
+{% if citas %}
+<div class="tabla-scroll">
+<table class="tabla">
+  <thead><tr><th>Hora</th><th>Paciente</th><th>Servicio</th><th>Estado</th><th>Acciones y notas</th></tr></thead>
+  <tbody>
+  {% for c in citas %}
+    <tr>
+      <td class="num"><strong>{{ c.inicio|time:'H:i' }}</strong>–{{ c.fin|time:'H:i' }}</td>
+      <td>{{ c.paciente }}<br><span class="muted">{{ c.paciente.telefono }}</span></td>
+      <td>{{ c.servicio.nombre }}</td>
+      <td><span class="etiqueta etiqueta--{{ c.estado }}">{{ c.get_estado_display }}</span></td>
+      <td>
+        {% if c.activa %}
+        <form method="post" action="{% url 'marcar_cita' c.pk %}">
+          {% csrf_token %}<input type="hidden" name="volver" value="{{ request.get_full_path }}">
+          <div class="acciones-fila">
+            {% if c.estado == 'atendida' or c.estado == 'no_presentada' %}
+              <span class="muted">Marcada como {{ c.get_estado_display|lower }}</span>
+            {% elif c.inicio <= ahora %}
+              <button class="btn btn--small" name="estado" value="atendida">Atendida</button>
+              <button class="btn btn--small btn--secundario" name="estado" value="no_presentada">No vino</button>
+            {% else %}<span class="muted">Se marca cuando empiece</span>{% endif %}
+          </div>
+          <div class="notas-form">
+            <input type="text" name="notas" value="{{ c.notas }}" placeholder="Notas de la sesión" aria-label="Notas">
+            <button class="btn btn--small btn--secundario" name="estado" value="{{ c.estado }}">Guardar nota</button>
+          </div>
+        </form>
+        {% else %}<span class="muted">—</span>{% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+  <p class="vacio">No tienes citas este día.</p>
+{% endif %}
+{% endblock %}
