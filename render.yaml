@@ -1,0 +1,24 @@
+# Blueprint de Render: servicio web.
+# En Render: New → Blueprint → este repositorio → Apply.
+#
+# La demo usa SQLite: build.sh migra y carga los datos de ejemplo en cada despliegue.
+# (El plan gratuito de Render solo permite una base PostgreSQL por cuenta y caduca a los 30 días.)
+# Para usar PostgreSQL basta con añadir la variable DATABASE_URL; el código no cambia.
+services:
+  - type: web
+    name: clinicacitas
+    runtime: python
+    plan: free
+    buildCommand: bash build.sh
+    startCommand: python -m gunicorn config.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: NODE_VERSION
+        value: 22.12.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: WEB_CONCURRENCY
+        value: 2
